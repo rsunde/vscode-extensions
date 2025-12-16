@@ -192,10 +192,10 @@ Initial release
 
 ### Building
 
-``````bash
+```bash
 npm install
 npm run compile
-``````
+```
 
 ### Testing
 
