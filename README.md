@@ -22,11 +22,8 @@ These standards apply to **this repo** and to **each extension**.
 
 - **Docs format**: Every extension README must include (in this order): **Overview**, **Commands**, **Settings**, **Multi-root / Workspace behavior** (if relevant), **Requirements**, **Development**, **Packaging & Publishing**, **Changelog**.
 - **Stability**: Treat command IDs and setting keys as public API; don’t rename them casually.
-- **Release hygiene**: When behavior changes, update:
-
-  - the extension `README.md`
-  - the extension `CHANGELOG.md`
-  - the extension version in `package.json`
+- **AI assistance**: Follow the repo’s Copilot guidance in `.github/copilot-instructions.md`.
+- **Release hygiene**: When behavior changes, update the extension `README.md`, `CHANGELOG.md`, and version in `package.json`.
 - **Monorepo metadata**: Each extension’s `package.json` must point `repository.url` at this repo and include `repository.directory` for its subfolder.
 
 ## Development (local)
@@ -43,6 +40,12 @@ Typical workflow:
 2. Open the extension folder you want to work on (or keep the monorepo open).
 3. Press `F5` to launch an **Extension Development Host**.
 4. Use the Command Palette in the Dev Host to run that extension’s commands.
+
+## Automation
+
+This repo includes PowerShell scripts under `tools/` to automate common tasks.
+
+- Icon generation: `pwsh -NoProfile -File tools/generate-icons.ps1 -All`
 
 ## Packaging & Publishing (prepare now, publish later)
 
@@ -77,6 +80,5 @@ Marketplace readiness checklist (quick):
 
 ## What “monorepo” changes vs one-repo-per-extension?
 
-- **What you have now**: already a monorepo (multiple extensions in one repo).
 - **Pros**: shared standards/docs, one place to manage releases, easy cross-extension improvements.
 - **Gotchas**: packaging/publishing is still **per extension folder**, and metadata should include the subfolder (`repository.directory`).
