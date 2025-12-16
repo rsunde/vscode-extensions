@@ -1,90 +1,84 @@
-# VS Code Extensions Repository
+# VS Code Extensions (Monorepo)
 
-## Overview
+A small collection of VS Code extensions I maintain in a single repository.
 
-This repository serves as a centralized collection of Visual Studio Code extensions. Each extension is self-contained within its own folder, making it easy to manage multiple extensions in one place while maintaining organization and clarity.
-
-## Purpose
-
-This repository is designed to:
-- Host multiple VS Code extension projects in a single, organized location
-- Facilitate AI-assisted development and maintenance of extensions
-- Enable automation through PowerShell scripts
-- Share common configuration files across extensions where beneficial
-- Maintain clear documentation of each extension's purpose and functionality
-
-## Repository Structure
-
-Each extension folder contains:
-- Complete extension source code
-- Individual README.md with extension-specific documentation
-- Package.json and extension manifest
-- Any extension-specific configuration files
-
-Some extensions may share common configuration files stored at the repository root or in a shared configuration folder.
+This repo is a **monorepo**: one Git repository containing multiple independent VS Code extensions (each in its own folder with its own `package.json`).
 
 ## Extensions
 
-This repository currently contains the following extensions:
+- **Branch Merger Extension** — One-command merge workflow + optional polling/notifications.
 
-*No extensions yet. Extensions will be listed here as they are added.*
+  - Project: `BranchMergerExtension/`
+  - Docs: [BranchMergerExtension/README.md](BranchMergerExtension/README.md)
 
-<!-- When adding a new extension, add it to the list above using the following format:
-- **[Extension Name](./extension-folder-name/)** - Brief description of what the extension does
--->
+- **Branch Name Template** — Create branches with a consistent prefix template.
 
-## AI Usage Guidelines
+  - Project: `BranchNameTemplateExtension/`
+  - Docs: [BranchNameTemplateExtension/README.md](BranchNameTemplateExtension/README.md)
 
-This repository is designed to work seamlessly with AI assistance. The AI should:
+## Repo Standards ("mine")
 
-1. **Maintain This README**: Keep the extensions list updated whenever a new extension is added or removed
-2. **Follow Extension Structure**: Each extension should be self-contained in its own folder
-3. **Update Documentation**: Keep both root and extension-specific documentation current
-4. **Respect Shared Resources**: Be aware of and properly manage shared configuration files
-5. **Create Automation**: Generate PowerShell scripts when automation is needed
+These standards apply to **this repo** and to **each extension**.
 
-See `.ai-instructions.md` for detailed AI guidelines.
+- **Docs format**: Every extension README must include (in this order): **Overview**, **Commands**, **Settings**, **Multi-root / Workspace behavior** (if relevant), **Requirements**, **Development**, **Packaging & Publishing**, **Changelog**.
+- **Stability**: Treat command IDs and setting keys as public API; don’t rename them casually.
+- **AI assistance**: Follow the repo’s Copilot guidance in `.github/copilot-instructions.md`.
+- **Release hygiene**: When behavior changes, update the extension `README.md`, `CHANGELOG.md`, and version in `package.json`.
+- **Monorepo metadata**: Each extension’s `package.json` must point `repository.url` at this repo and include `repository.directory` for its subfolder.
 
-## PowerShell Automation
+## Development (local)
 
-PowerShell scripts are used to automate common tasks such as:
-- Creating new extension scaffolding
-- Building multiple extensions
-- Publishing extensions
-- Managing shared configurations
+Prereqs:
 
-Automation scripts are stored in the `scripts/` folder (when created).
+- VS Code
+- Git
+- Node.js (use the current **Node LTS**)
 
-## Shared Configuration
+Typical workflow:
 
-Some extensions may share common configuration files to maintain consistency. These are documented in each extension's README and may include:
-- ESLint configurations
-- TypeScript configurations
-- Testing configurations
-- Common dependencies
+1. Open this repo in VS Code.
+2. Open the extension folder you want to work on (or keep the monorepo open).
+3. Press `F5` to launch an **Extension Development Host**.
+4. Use the Command Palette in the Dev Host to run that extension’s commands.
 
-## Contributing
+## Automation
 
-When adding a new extension:
+This repo includes PowerShell scripts under `tools/` to automate common tasks.
 
-1. Create a new folder with a descriptive name (e.g., `my-extension`)
-2. Initialize the extension using `yo code` or similar scaffolding tool
-3. Update this README to include the new extension in the Extensions section
-4. Add extension-specific documentation in the extension's README
-5. Commit changes with clear commit messages
+- Icon generation: `pwsh -NoProfile -File tools/generate-icons.ps1 -All`
 
-## Getting Started
+## Packaging & Publishing (prepare now, publish later)
 
-To work with an extension in this repository:
+Each extension is packaged/published from its own folder.
 
-1. Navigate to the extension's folder
-2. Run `npm install` to install dependencies
-3. Follow the extension-specific README for development instructions
-4. Use VS Code's extension development host to test (F5)
+Install the VS Code Extension CLI (once):
 
-## Requirements
+```bash
+npm install -g @vscode/vsce
+```
 
-- Node.js (LTS version recommended)
-- npm or yarn
-- Visual Studio Code
-- PowerShell (for automation scripts)
+Package an extension (example):
+
+```bash
+cd BranchMergerExtension
+vsce package
+```
+
+Publish (when ready):
+
+```bash
+cd BranchMergerExtension
+vsce publish
+```
+
+Marketplace readiness checklist (quick):
+
+- Provide an `icon` in each extension `package.json`
+- Ensure `repository`, `bugs`, and `homepage` metadata are correct
+- Review README screenshots/usage notes
+- Confirm activation events are minimal and correct
+
+## What “monorepo” changes vs one-repo-per-extension?
+
+- **Pros**: shared standards/docs, one place to manage releases, easy cross-extension improvements.
+- **Gotchas**: packaging/publishing is still **per extension folder**, and metadata should include the subfolder (`repository.directory`).

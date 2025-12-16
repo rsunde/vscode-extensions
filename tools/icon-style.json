@@ -1,0 +1,27 @@
+{
+    "size": 128,
+    "background": {
+        "type": "grid",
+        "seed": 1337,
+        "cellSize": 16,
+        "tileColors": [
+            "#101726",
+            "#121B2B",
+            "#152033",
+            "#18263D"
+        ],
+        "tileJitter": 0.08,
+        "lineColor": "$gridLine",
+        "lineWidth": 1,
+        "dotRadius": 0
+    },
+    "palette": {
+        "primary": "#00AAFF",
+        "fg": "#EBEBEB",
+        "shadow": "#5A000000",
+        "gridLine": "#8022314A",
+        "gridDot": "#6EE7FF",
+        "gridGlow": "#1837D6FF"
+    },
+    "baseShapes": []
+}

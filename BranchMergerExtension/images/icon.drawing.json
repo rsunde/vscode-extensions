@@ -1,0 +1,134 @@
+{
+    "size": 128,
+    "output": "icon.png",
+    "palette": {
+        "secondary": "#78C878"
+    },
+    "shapes": [
+        {
+            "type": "polyline",
+            "points": [
+                [
+                    34,
+                    30
+                ],
+                [
+                    34,
+                    74
+                ],
+                [
+                    70,
+                    98
+                ]
+            ],
+            "color": "$primary",
+            "width": 10,
+            "cap": "round"
+        },
+        {
+            "type": "polyline",
+            "points": [
+                [
+                    94,
+                    34
+                ],
+                [
+                    70,
+                    58
+                ],
+                [
+                    70,
+                    98
+                ]
+            ],
+            "color": "$secondary",
+            "width": 10,
+            "cap": "round"
+        },
+        {
+            "type": "arrow",
+            "from": [
+                70,
+                98
+            ],
+            "to": [
+                70,
+                114
+            ],
+            "color": "$fg",
+            "width": 8,
+            "cap": "round",
+            "headSize": 12
+        },
+        {
+            "type": "shadowedNode",
+            "center": [
+                34,
+                30
+            ],
+            "radius": 9,
+            "fillColor": "$fg",
+            "shadowColor": "$shadow",
+            "shadowOffset": [
+                2,
+                2
+            ]
+        },
+        {
+            "type": "shadowedNode",
+            "center": [
+                34,
+                74
+            ],
+            "radius": 9,
+            "fillColor": "$fg",
+            "shadowColor": "$shadow",
+            "shadowOffset": [
+                2,
+                2
+            ]
+        },
+        {
+            "type": "shadowedNode",
+            "center": [
+                94,
+                34
+            ],
+            "radius": 9,
+            "fillColor": "$fg",
+            "shadowColor": "$shadow",
+            "shadowOffset": [
+                2,
+                2
+            ]
+        },
+        {
+            "type": "shadowedNode",
+            "center": [
+                70,
+                58
+            ],
+            "radius": 9,
+            "fillColor": "$fg",
+            "shadowColor": "$shadow",
+            "shadowOffset": [
+                2,
+                2
+            ]
+        },
+        {
+            "type": "shadowedNode",
+            "center": [
+                70,
+                98
+            ],
+            "radius": 9,
+            "fillColor": "$fg",
+            "shadowColor": "$shadow",
+            "shadowOffset": [
+                2,
+                2
+            ]
+        }
+    ]
+}

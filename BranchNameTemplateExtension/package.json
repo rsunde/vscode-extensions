@@ -1,0 +1,75 @@
+{
+    "name": "branch-name-template",
+    "displayName": "Branch Name Template",
+    "description": "Create branches with a default prefix",
+    "version": "0.0.1",
+    "publisher": "rsunde",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rsunde/vscode-extensions.git",
+        "directory": "BranchNameTemplateExtension"
+    },
+    "engines": {
+        "vscode": "^1.70.0"
+    },
+    "categories": [
+        "SCM Providers",
+        "Other"
+    ],
+    "keywords": [
+        "git",
+        "branch",
+        "template",
+        "prefix",
+        "workflow"
+    ],
+    "icon": "images/icon.png",
+    "license": "MIT",
+    "main": "./extension.js",
+    "activationEvents": [
+        "onCommand:branch-name-template.createBranch"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "branch-name-template.createBranch",
+                "title": "Create Branch from Template"
+            }
+        ],
+        "configuration": {
+            "title": "Branch Name Template",
+            "properties": {
+                "branchNameTemplate.prefix": {
+                    "order": 1,
+                    "type": "string",
+                    "default": "${team}/${baseBranch}/${username}/",
+                    "description": "Template for the branch name. Variables: ${team}, ${baseBranch}, ${username}"
+                },
+                "branchNameTemplate.team": {
+                    "order": 2,
+                    "type": "string",
+                    "default": "MyTeam",
+                    "description": "Your team name used in the ${team} variable"
+                },
+                "branchNameTemplate.autoDetectUsername": {
+                    "order": 3,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If true, tries to detect username from git config or OS. If false, uses the 'username' setting."
+                },
+                "branchNameTemplate.username": {
+                    "order": 4,
+                    "type": "string",
+                    "default": "",
+                    "description": "Override username for ${username}. Leave empty to auto-detect."
+                },
+                "branchNameTemplate.checkout": {
+                    "order": 5,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically checkout the new branch"
+                }
+            }
+        }
+    }
+}
