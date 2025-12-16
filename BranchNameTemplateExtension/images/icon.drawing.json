@@ -1,0 +1,80 @@
+{
+    "size": 128,
+    "output": "icon.png",
+    "palette": {
+        "secondary": "#F6C177",
+        "paper": "#1E2636"
+    },
+    "shapes": [
+        {
+            "type": "roundedRect",
+            "x": 24,
+            "y": 20,
+            "width": 80,
+            "height": 92,
+            "radius": 14,
+            "fillColor": "$paper",
+            "strokeColor": "$primary",
+            "strokeWidth": 4,
+            "cap": "round"
+        },
+        {
+            "type": "polyline",
+            "points": [
+                [
+                    38,
+                    44
+                ],
+                [
+                    90,
+                    44
+                ]
+            ],
+            "color": "$fg",
+            "width": 4,
+            "cap": "round"
+        },
+        {
+            "type": "polyline",
+            "points": [
+                [
+                    38,
+                    58
+                ],
+                [
+                    82,
+                    58
+                ]
+            ],
+            "color": "$fg",
+            "width": 4,
+            "cap": "round"
+        },
+        {
+            "type": "polyline",
+            "points": [
+                [
+                    38,
+                    72
+                ],
+                [
+                    74,
+                    72
+                ]
+            ],
+            "color": "$fg",
+            "width": 4,
+            "cap": "round"
+        },
+        {
+            "type": "text",
+            "text": "${}",
+            "x": 47,
+            "y": 82,
+            "font": "Segoe UI",
+            "size": 28,
+            "bold": true,
+            "color": "$secondary"
+        }
+    ]
+}

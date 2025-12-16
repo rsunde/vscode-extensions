@@ -1,0 +1,99 @@
+{
+    "name": "branch-merger-extension",
+    "displayName": "Branch Merger Extension",
+    "description": "Easily merge changes from other branches into your current branch.",
+    "version": "0.0.1",
+    "publisher": "rsunde",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rsunde/vscode-extensions.git",
+        "directory": "BranchMergerExtension"
+    },
+    "engines": {
+        "vscode": "^1.70.0"
+    },
+    "categories": [
+        "SCM Providers",
+        "Other"
+    ],
+    "keywords": [
+        "git",
+        "merge",
+        "branch",
+        "workflow"
+    ],
+    "icon": "images/icon.png",
+    "license": "MIT",
+    "main": "./extension.js",
+    "activationEvents": [
+        "onStartupFinished",
+        "onCommand:branch-merger-extension.mergeBranch",
+        "onCommand:branch-merger-extension.checkDefaultUpdates"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "branch-merger-extension.mergeBranch",
+                "title": "Merge Branch into Current"
+            },
+            {
+                "command": "branch-merger-extension.checkDefaultUpdates",
+                "title": "Check Default Branch for Updates"
+            }
+        ],
+        "configuration": {
+            "title": "Branch Merger Extension",
+            "properties": {
+                "branchMergerExtension.defaultSourceBranch": {
+                    "order": 1,
+                    "type": "string",
+                    "default": "auto",
+                    "description": "The default branch to merge from. Use 'auto' to detect from the repo (recommended), or set explicitly (e.g. main, master, develop)."
+                },
+                "branchMergerExtension.rememberDetectedDefaultBranch": {
+                    "order": 2,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "When defaultSourceBranch is 'auto', remembers the detected/default branch per repo to avoid prompting again."
+                },
+                "branchMergerExtension.pollForUpdates": {
+                    "order": 3,
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, periodically checks for new commits on the default source branch and notifies you."
+                },
+                "branchMergerExtension.pollIntervalMinutes": {
+                    "order": 4,
+                    "type": "number",
+                    "default": 5,
+                    "minimum": 1,
+                    "description": "Polling interval in minutes (only used when pollForUpdates is true)."
+                },
+                "branchMergerExtension.autoFetchBeforePoll": {
+                    "order": 5,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If true, runs 'git fetch --prune' before checking for updates."
+                },
+                "branchMergerExtension.remoteName": {
+                    "order": 6,
+                    "type": "string",
+                    "default": "origin",
+                    "description": "Remote name used for tracking branches (typically 'origin')."
+                },
+                "branchMergerExtension.preferRemoteTracking": {
+                    "order": 7,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If true, checks remote tracking ref (e.g. origin/master) when available; otherwise checks the local branch."
+                },
+                "branchMergerExtension.notifyOnUpdates": {
+                    "order": 8,
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If true, shows a notification when updates are detected."
+                }
+            }
+        }
+    }
+}
