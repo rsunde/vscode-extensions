@@ -43,8 +43,9 @@ Typical workflow:
 
 ## Automation
 
-This repo includes PowerShell scripts under `tools/` to automate common tasks.
+This repo includes PowerShell scripts for automation:
 
+- Repo automation (scaffolding/build): see [tools/README.md](tools/README.md)
 - Icon generation: `pwsh -NoProfile -File tools/generate-icons.ps1 -All`
 
 ## Packaging & Publishing (prepare now, publish later)

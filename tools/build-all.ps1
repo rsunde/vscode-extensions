@@ -4,7 +4,11 @@
 
 .DESCRIPTION
     This script finds all extension folders (those containing package.json with VS Code engine),
-    installs dependencies if needed, and compiles each extension.
+    installs dependencies (when needed), and runs each extension's build step (when defined).
+
+    Notes:
+    - Not all extensions in this repo are TypeScript-based.
+    - For JS-only extensions with no build scripts, this script will simply validate discovery and (optionally) install dependencies.
 
 .PARAMETER Clean
     If specified, runs a clean build (deletes out/ folder before building)
@@ -13,15 +17,15 @@
     If specified, skips npm install and only runs compilation
 
 .EXAMPLE
-    .\build-all.ps1
+    .\tools\build-all.ps1
     Builds all extensions
 
 .EXAMPLE
-    .\build-all.ps1 -Clean
+    .\tools\build-all.ps1 -Clean
     Performs a clean build of all extensions
 
 .EXAMPLE
-    .\build-all.ps1 -SkipInstall
+    .\tools\build-all.ps1 -SkipInstall
     Builds all extensions without running npm install
 
 .NOTES
@@ -31,10 +35,10 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$Clean,
-    
-    [Parameter(Mandatory=$false)]
+
+    [Parameter(Mandatory = $false)]
     [switch]$SkipInstall
 )
 
@@ -47,12 +51,16 @@ Write-Host "Repository root: $repoRoot`n" -ForegroundColor Gray
 
 # Find all extension folders
 $extensions = Get-ChildItem -Directory | Where-Object {
-    $packageJsonPath = Join-Path $_.FullName "package.json"
-    if (Test-Path $packageJsonPath) {
-        $packageJson = Get-Content $packageJsonPath | ConvertFrom-Json
-        return $packageJson.engines.vscode -ne $null
+    $packageJsonPath = Join-Path $_.FullName 'package.json'
+    if (-not (Test-Path $packageJsonPath)) { return $false }
+
+    try {
+        $packageJson = Get-Content -Raw $packageJsonPath | ConvertFrom-Json
+        return $null -ne $packageJson.engines.vscode
     }
-    return $false
+    catch {
+        return $false
+    }
 }
 
 if ($extensions.Count -eq 0) {
@@ -73,39 +81,71 @@ foreach ($extension in $extensions) {
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host "Building: $($extension.Name)" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
-    
+
     Set-Location $extension.FullName
-    
+
     try {
+        $packageJsonPath = Join-Path $extension.FullName 'package.json'
+        $packageJson = Get-Content -Raw $packageJsonPath | ConvertFrom-Json
+
+        $hasDependencies = ($null -ne $packageJson.dependencies) -or ($null -ne $packageJson.devDependencies)
+        $hasLockFile = (Test-Path (Join-Path $extension.FullName 'package-lock.json'))
+
+        $scripts = $packageJson.scripts
+        $buildScriptName = $null
+        if ($null -ne $scripts) {
+            if ($null -ne $scripts.compile) { $buildScriptName = 'compile' }
+            elseif ($null -ne $scripts.build) { $buildScriptName = 'build' }
+        }
+
         # Clean build if requested
         if ($Clean) {
-            $outDir = Join-Path $extension.FullName "out"
-            if (Test-Path $outDir) {
-                Write-Host "Cleaning output directory..." -ForegroundColor Yellow
-                Remove-Item -Path $outDir -Recurse -Force
-            }
-        }
-        
-        # Install dependencies if needed
-        if (-not $SkipInstall) {
-            if (-not (Test-Path "node_modules")) {
-                Write-Host "Installing dependencies..." -ForegroundColor Yellow
-                npm install
-                if ($LASTEXITCODE -ne 0) {
-                    throw "npm install failed"
+            $pathsToClean = @(
+                (Join-Path $extension.FullName 'out'),
+                (Join-Path $extension.FullName 'dist'),
+                (Join-Path $extension.FullName 'node_modules'),
+                (Join-Path $extension.FullName '.vscode-test')
+            )
+
+            foreach ($p in $pathsToClean) {
+                if (Test-Path $p) {
+                    Write-Host "Cleaning: $([System.IO.Path]::GetFileName($p))" -ForegroundColor Yellow
+                    Remove-Item -Path $p -Recurse -Force
                 }
-            } else {
-                Write-Host "Dependencies already installed (use -Clean to reinstall)" -ForegroundColor Gray
             }
         }
-        
-        # Compile
-        Write-Host "Compiling TypeScript..." -ForegroundColor Yellow
-        npm run compile
-        if ($LASTEXITCODE -ne 0) {
-            throw "Compilation failed"
+
+        # Install dependencies (only when the extension declares any)
+        if (-not $SkipInstall) {
+            if (-not $hasDependencies) {
+                Write-Host "No dependencies declared; skipping npm install" -ForegroundColor Gray
+            }
+            else {
+                Write-Host "Installing dependencies..." -ForegroundColor Yellow
+                if ($hasLockFile) {
+                    npm ci
+                }
+                else {
+                    npm install
+                }
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Dependency install failed"
+                }
+            }
         }
-        
+
+        # Build (only when the extension defines a build script)
+        if ($null -eq $buildScriptName) {
+            Write-Host "No build script found (no scripts.compile/scripts.build); skipping build" -ForegroundColor Gray
+        }
+        else {
+            Write-Host "Running npm run $buildScriptName..." -ForegroundColor Yellow
+            npm run $buildScriptName
+            if ($LASTEXITCODE -ne 0) {
+                throw "Build failed"
+            }
+        }
+
         Write-Host "✓ Build successful for $($extension.Name)" -ForegroundColor Green
         $successCount++
     }
