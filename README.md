@@ -16,6 +16,11 @@ This repo is a **monorepo**: one Git repository containing multiple independent 
   - Project: `BranchNameTemplateExtension/`
   - Docs: [BranchNameTemplateExtension/README.md](BranchNameTemplateExtension/README.md)
 
+- **WPF DataContext MVP** — F12 Go To Definition for simple WPF XAML `{Binding Property}` (design-time DataContext only). (Currently untested; best-effort.)
+
+  - Project: `WpfDataContextMvpExtension/`
+  - Docs: [WpfDataContextMvpExtension/README.md](WpfDataContextMvpExtension/README.md)
+
 ## Repo Standards ("mine")
 
 These standards apply to **this repo** and to **each extension**.

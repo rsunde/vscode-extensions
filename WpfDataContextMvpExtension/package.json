@@ -1,0 +1,40 @@
+{
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "displayName": "WPF DataContext MVP",
+  "main": "./extension.js",
+  "repository": {
+    "directory": "WpfDataContextMvpExtension",
+    "url": "https://github.com/rsunde/vscode-extensions.git",
+    "type": "git"
+  },
+  "license": "MIT",
+  "name": "wpf-data-context-mvp",
+  "contributes": {
+    "commands": [],
+    "configuration": {
+      "title": "WPF DataContext MVP",
+      "properties": {}
+    }
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "wpf",
+    "xaml",
+    "binding",
+    "datacontext",
+    "definition",
+    "navigation"
+  ],
+  "publisher": "rsunde",
+  "description": "Go To Definition (F12) for WPF XAML {Binding Property} using design-time DataContext.",
+  "version": "0.0.1",
+  "activationEvents": [
+    "onLanguage:xml"
+  ],
+  "icon": "images/icon.png"
+}
